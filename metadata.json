@@ -1,0 +1,7 @@
+{
+  "name": "copia visitas Técnicas",
+  "description": "Copia hecha con los cambios: 2 roles, estado \"en revisión\" y pop up",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
