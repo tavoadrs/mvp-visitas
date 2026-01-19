@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { ImageModal } from '../components/ImageModal';
 import { Task } from '../types';
+import { IMAGE_FALLBACK } from '../constants';
 
 interface ManagerOrderDetailViewProps {
   task: Task;
@@ -44,7 +45,7 @@ export const ManagerOrderDetailView: React.FC<ManagerOrderDetailViewProps> = ({ 
             >
               <ChevronLeft size={24} />
             </button>
-            <h2 className="text-white text-lg font-bold tracking-tight">Detalle de Orden</h2>
+            <h2 className="text-white text-lg font-bold tracking-tight">Inspección de Obra</h2>
           </div>
           <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-[10px] font-bold border border-blue-500/30 flex items-center gap-1.5 uppercase">
             <span className="h-2 w-2 bg-blue-500 rounded-full animate-pulse"></span>
@@ -57,46 +58,47 @@ export const ManagerOrderDetailView: React.FC<ManagerOrderDetailViewProps> = ({ 
         <div className="p-4 space-y-4">
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
             <div className="mb-6">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Título</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Título de Tarea</p>
               <h3 className="text-base font-bold text-slate-900 leading-tight">{task.title}</h3>
             </div>
             
             <div className="grid grid-cols-2 gap-y-4 pt-4 border-t border-slate-50">
               <div className="space-y-0.5">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Obra</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Proyecto</p>
                 <p className="text-sm font-bold text-slate-900">{task.project}</p>
               </div>
               <div className="space-y-0.5 text-right">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Solicitante</p>
-                <p className="text-sm font-semibold text-slate-700">Arq. Marcos V.</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Encargado</p>
+                <p className="text-sm font-semibold text-slate-700">{task.assignee || 'Sin asignar'}</p>
               </div>
               <div className="space-y-0.5">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fecha de Solicitud</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Apertura</p>
                 <div className="flex items-center gap-1 text-sm font-medium text-slate-600">
                   <Calendar size={14} />
                   {task.date}
                 </div>
               </div>
               <div className="space-y-0.5 text-right">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Asignado</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Solicitado por</p>
                 <div className="flex items-center justify-end gap-1 text-sm font-medium text-slate-600">
                   <HardHat size={14} />
-                  {task.assignee || 'Sin asignar'}
+                  Arq. Marcos V.
                 </div>
               </div>
             </div>
           </div>
 
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Foto Original de Reporte</h3>
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Captura Inicial de Sitio</h3>
             <div 
               className="relative group aspect-video rounded-xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer"
-              onClick={() => openModal(task.foto_original, "Captura Inicial de Obra")}
+              onClick={() => openModal(task.foto_original, "Estado Inicial del Sitio")}
             >
               <img 
                 alt="Foto Original" 
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                 src={task.foto_original}
+                onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Maximize2 className="text-white" size={32} />
@@ -105,7 +107,7 @@ export const ManagerOrderDetailView: React.FC<ManagerOrderDetailViewProps> = ({ 
           </div>
 
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-8">Historial de Avances</h3>
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-8">Bitácora de Avances</h3>
             <div className="space-y-0">
               {task.task_history && task.task_history.length > 0 ? (
                 task.task_history.map((item, index) => (
@@ -118,21 +120,26 @@ export const ManagerOrderDetailView: React.FC<ManagerOrderDetailViewProps> = ({ 
                       <div className="absolute left-[22px] top-12 bottom-0 w-0.5 bg-slate-200"></div>
                     )}
                     <div className="absolute left-0 top-2 h-11 w-11 rounded-lg bg-slate-100 overflow-hidden border-2 border-white shadow-sm z-10 group-hover:border-blue-500 transition-colors">
-                      <img src={item.history_image} className="w-full h-full object-cover" alt={`Hito ${item.id}`} />
+                      <img 
+                        src={item.history_image} 
+                        className="w-full h-full object-cover" 
+                        alt={`Hito ${item.id}`} 
+                        onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
+                      />
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between items-start">
-                        <p className="text-[11px] font-bold text-blue-500 uppercase">Avance Tecnico</p>
+                        <p className="text-[11px] font-bold text-blue-500 uppercase">Avance Registrado</p>
                         <p className="text-[10px] text-slate-400">{formatFecha(item.fecha)}</p>
                       </div>
-                      <p className="text-sm text-slate-600">{item.comentario}</p>
+                      <p className="text-sm text-slate-600 leading-snug">{item.comentario}</p>
                     </div>
                   </div>
                 ))
               ) : (
                 <div className="flex flex-col items-center py-6 text-slate-400">
                   <History size={32} className="opacity-20 mb-2" />
-                  <p className="text-xs font-medium">No hay historial registrado</p>
+                  <p className="text-xs font-medium">Sin registros en bitácora</p>
                 </div>
               )}
             </div>

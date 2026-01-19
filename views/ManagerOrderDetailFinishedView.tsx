@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { ImageModal } from '../components/ImageModal';
 import { Task } from '../types';
+import { IMAGE_FALLBACK } from '../constants';
 
 interface ManagerOrderDetailFinishedViewProps {
   task: Task;
@@ -21,7 +22,8 @@ export const ManagerOrderDetailFinishedView: React.FC<ManagerOrderDetailFinished
     title: ''
   });
 
-  const closingImageUrl = "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop";
+  // Imagen de cierre de obra real (Picsum ID 349 - Estructura terminada)
+  const closingImageUrl = "https://picsum.photos/id/349/1000/600";
 
   const openModal = (url: string, title: string) => {
     setModalConfig({ isOpen: true, url, title });
@@ -47,9 +49,9 @@ export const ManagerOrderDetailFinishedView: React.FC<ManagerOrderDetailFinished
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={onBack} className="text-white hover:bg-white/10 p-1 rounded-full"><ChevronLeft size={24} /></button>
-            <h2 className="text-white text-lg font-bold tracking-tight">Detalle de Orden</h2>
+            <h2 className="text-white text-lg font-bold tracking-tight">Orden Auditada</h2>
           </div>
-          <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30 uppercase">Terminada</span>
+          <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30 uppercase">Finalizada</span>
         </div>
       </header>
 
@@ -63,11 +65,11 @@ export const ManagerOrderDetailFinishedView: React.FC<ManagerOrderDetailFinished
             
             <div className="grid grid-cols-2 gap-y-4 pt-4 border-t border-slate-50">
               <div className="space-y-0.5">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Obra</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Proyecto</p>
                 <p className="text-sm font-bold text-slate-900">{task.project}</p>
               </div>
               <div className="space-y-0.5 text-right">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fecha de Solicitud</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fecha Cierre</p>
                 <div className="flex items-center justify-end gap-1 text-sm font-medium text-slate-600">
                   <Calendar size={16} />
                   {task.date}
@@ -77,7 +79,7 @@ export const ManagerOrderDetailFinishedView: React.FC<ManagerOrderDetailFinished
           </div>
 
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-8">Historial de Avances</h3>
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-8">Bitácora de Ejecución</h3>
             <div className="space-y-0">
               {task.task_history && task.task_history.length > 0 ? (
                 task.task_history.map((item, index) => (
@@ -90,7 +92,12 @@ export const ManagerOrderDetailFinishedView: React.FC<ManagerOrderDetailFinished
                       <div className="absolute left-[22px] top-12 bottom-0 w-0.5 bg-slate-200"></div>
                     )}
                     <div className="absolute left-0 top-2 h-11 w-11 rounded-lg bg-slate-100 overflow-hidden border-2 border-white shadow-sm z-10 group-hover:border-emerald-500">
-                      <img src={item.history_image} className="w-full h-full object-cover" alt={`Thumb ${item.id}`} />
+                      <img 
+                        src={item.history_image} 
+                        className="w-full h-full object-cover" 
+                        alt={`Thumb ${item.id}`} 
+                        onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
+                      />
                     </div>
                     <div className="flex justify-between items-start">
                       <p className="text-[11px] font-bold text-emerald-500 uppercase">Hito Auditado</p>
@@ -109,17 +116,31 @@ export const ManagerOrderDetailFinishedView: React.FC<ManagerOrderDetailFinished
           </div>
 
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase mb-3">FOTO ORIGINAL DE REPORTE</h3>
-            <div className="relative group aspect-video rounded-xl overflow-hidden cursor-pointer mb-4" onClick={() => openModal(task.foto_original, "Captura Inicial")}>
-              <img src={task.foto_original} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"><Maximize2 className="text-white" size={32} /></div>
-            </div>
+             <div className="grid grid-cols-1 gap-6">
+                <div>
+                  <h3 className="text-[10px] font-bold text-slate-400 uppercase mb-3">Captura de Apertura</h3>
+                  <div className="relative group aspect-video rounded-xl overflow-hidden cursor-pointer" onClick={() => openModal(task.foto_original, "Captura Inicial")}>
+                    <img 
+                      src={task.foto_original} 
+                      className="w-full h-full object-cover" 
+                      onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"><Maximize2 className="text-white" size={32} /></div>
+                  </div>
+                </div>
 
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase mb-3 text-emerald-600">FOTO ORIGINAL DEL CIERRE</h3>
-            <div className="relative group aspect-video rounded-xl overflow-hidden cursor-pointer active:scale-[0.99] transition-transform" onClick={() => openModal(closingImageUrl, "Evidencia de Cierre Final")}>
-              <img src={closingImageUrl} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"><Maximize2 className="text-white" size={32} /></div>
-            </div>
+                <div>
+                  <h3 className="text-[10px] font-bold text-emerald-600 uppercase mb-3">Evidencia de Entrega Final</h3>
+                  <div className="relative group aspect-video rounded-xl overflow-hidden cursor-pointer active:scale-[0.99] transition-transform" onClick={() => openModal(closingImageUrl, "Entrega Final del Trabajo")}>
+                    <img 
+                      src={closingImageUrl} 
+                      className="w-full h-full object-cover" 
+                      onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"><Maximize2 className="text-white" size={32} /></div>
+                  </div>
+                </div>
+             </div>
           </div>
         </div>
       </main>

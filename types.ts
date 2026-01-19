@@ -26,11 +26,13 @@ export interface Task {
   date: string; // ISO date string or formatted string
   time?: string;
   description: string;
+  solicitante: string; // agregado manualmente
   assignee?: string;
   status: TaskStatus;
   duration?: string; // e.g. "2d 15h"
   task_history?: TaskHistory[];
   foto_original: string;
+  evidencia_final: string; //agregado manualmente
 }
 
 export interface ProjectStats {

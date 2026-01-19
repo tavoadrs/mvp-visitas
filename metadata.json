@@ -1,6 +1,6 @@
 {
-  "name": "copia visitas Técnicas",
-  "description": "Copia hecha con los cambios: 2 roles, estado \"en revisión\" y pop up",
+  "name": "Visitas Tecnicas App",
+  "description": "Plataforma de gestión de visitas técnicas en proyectos de construcción",
   "requestFramePermissions": [
     "camera"
   ]
