@@ -57,7 +57,7 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
   };
 
   const getStatusBadge = () => {
-    const baseClass = "px-3 py-1 rounded-full text-[10px] font-bold border flex items-center gap-1.5 uppercase";
+    const baseClass = "px-3 py-1 rounded-full text-[10px] font-bold border flex items-center gap-1.5 uppercase transition-all duration-300";
     switch (task.status) {
       case TaskStatus.COMPLETED:
         return (
@@ -92,7 +92,7 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
       <header className="bg-slate-900 pt-12 pb-5 px-4 shadow-lg z-20 shrink-0 sticky top-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <button onClick={onBack} className="text-white hover:bg-white/10 p-1.5 rounded-full flex items-center justify-center">
+            <button onClick={onBack} className="text-white hover:bg-white/10 p-1.5 rounded-full flex items-center justify-center transition-colors">
               <ChevronLeft size={22} strokeWidth={2.5} />
             </button>
             <h2 className="text-white text-lg font-bold tracking-tight">
@@ -103,12 +103,12 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto no-scrollbar">
         <div className="p-4 space-y-4">
-          {/* 1. Tarjeta de Información General */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+          {/* 1. Datos de la visita */}
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
             <div className="mb-6">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Título</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Título de la Visita</p>
               <h3 className="text-base font-bold text-slate-900 leading-tight">{task.title}</h3>
             </div>
             <div className="grid grid-cols-2 gap-y-5 pt-5 border-t border-slate-50">
@@ -128,7 +128,7 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
                 </div>
               </div>
               <div className="space-y-0.5 text-right">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Responsable</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Asignado</p>
                 <div className="flex items-center justify-end gap-1.5 text-sm font-medium text-slate-600">
                   <HardHat size={14} className="text-slate-400" />
                   {task.assignee || 'Sin asignar'}
@@ -138,21 +138,21 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
           </div>
 
           {/* 2. Descripción del Requerimiento */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Descripción del Requerimiento</h3>
             <p className="text-[15px] leading-relaxed text-slate-700">{task.description}</p>
           </div>
 
-          {/* 3. Foto Original del Reporte */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+          {/* 3. Foto original del reporte */}
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Foto Original de Reporte</h3>
             <div 
-              className="relative group aspect-video rounded-xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer" 
+              className="relative group aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100 cursor-pointer" 
               onClick={() => openModal(task.foto_original, "Captura Inicial")}
             >
               <img 
                 alt="Foto Original" 
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                 src={task.foto_original}
                 onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
               />
@@ -163,7 +163,7 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
           </div>
 
           {/* 4. Historial de Avances */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-8">Historial de Avances</h3>
             <div className="relative space-y-0">
               {!isPending && paginatedHistory.length > 0 ? (
@@ -186,7 +186,7 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
                       </div>
                       <div className="space-y-1.5">
                         <div className="flex justify-between items-start">
-                          <p className={`text-[11px] font-bold uppercase tracking-tight text-slate-500`}>Registro de Avance</p>
+                          <p className={`text-[11px] font-bold uppercase tracking-tight text-slate-500`}>Avance de Obra</p>
                           <p className="text-[10px] font-semibold text-slate-400">{formatFecha(item.fecha)} • {formatHora(item.fecha)}</p>
                         </div>
                         <p className={`text-sm leading-snug text-slate-600`}>{item.comentario}</p>
@@ -195,27 +195,27 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
                   );
                 })
               ) : (
-                <div className="flex flex-col items-center py-8 text-slate-400 text-center">
-                  <History size={40} className="opacity-10 mb-2" />
-                  <p className="text-xs font-bold uppercase tracking-widest opacity-40">Sin registros históricos</p>
+                <div className="flex flex-col items-center py-10 text-slate-400 text-center">
+                  <History size={48} className="opacity-10 mb-3" />
+                  <p className="text-xs font-bold uppercase tracking-[0.15em] opacity-40">Sin avances registrados</p>
                 </div>
               )}
             </div>
 
             {totalHistoryPages > 1 && !isPending && (
-              <div className="flex items-center justify-center gap-4 py-4 border-t border-slate-50">
+              <div className="flex items-center justify-center gap-4 py-4 border-t border-slate-50 mt-2">
                 <button 
                   disabled={currentHistoryPage === 1}
                   onClick={() => setCurrentHistoryPage(prev => Math.max(1, prev - 1))}
-                  className="flex items-center gap-1 text-[10px] font-bold text-slate-400 disabled:opacity-20 uppercase tracking-widest"
+                  className="flex items-center gap-1 text-[10px] font-bold text-slate-400 disabled:opacity-20 uppercase tracking-widest transition-opacity"
                 >
                   <ChevronLeft size={16} /> Anterior
                 </button>
-                <span className="text-[10px] font-black text-slate-900 uppercase">Página {currentHistoryPage} de {totalHistoryPages}</span>
+                <span className="text-[10px] font-black text-slate-900 uppercase">Página {currentHistoryPage} / {totalHistoryPages}</span>
                 <button 
                   disabled={currentHistoryPage === totalHistoryPages}
                   onClick={() => setCurrentHistoryPage(prev => Math.min(totalHistoryPages, prev + 1))}
-                  className="flex items-center gap-1 text-[10px] font-bold text-slate-400 disabled:opacity-20 uppercase tracking-widest"
+                  className="flex items-center gap-1 text-[10px] font-bold text-slate-400 disabled:opacity-20 uppercase tracking-widest transition-opacity"
                 >
                   Siguiente <ChevronRight size={16} />
                 </button>
@@ -225,7 +225,7 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
 
           {/* 5. Descripción del cierre (Solo si FINALIZADO) */}
           {isCompleted && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Descripción del cierre</h3>
               <p className="text-[15px] leading-relaxed text-slate-700">
                 {task.descripcion_final || 'No se proporcionó un resumen final detallado.'}
@@ -235,15 +235,15 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
 
           {/* 6. Foto Original del Cierre (Solo si FINALIZADO) */}
           {isCompleted && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 pb-8">
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 pb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Foto original del cierre</h3>
               <div 
-                className="relative group aspect-video rounded-xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer" 
-                onClick={() => openModal(task.evidencia_final, "Evidencia de Entrega")}
+                className="relative group aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100 cursor-pointer" 
+                onClick={() => openModal(task.evidencia_final, "Evidencia de Entrega Final")}
               >
                 <img 
                   alt="Evidencia Final" 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                   src={task.evidencia_final}
                   onError={(e) => { (e.target as HTMLImageElement).src = IMAGE_FALLBACK; }}
                 />
@@ -252,32 +252,31 @@ export const WorkerOrderDetailView: React.FC<WorkerOrderDetailViewProps> = ({ ta
                 </div>
                 <div className="absolute bottom-3 left-3 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5">
                   <Check size={14} strokeWidth={4} />
-                  Evidencia Final
+                  Cierre de Obra
                 </div>
               </div>
             </div>
           )}
 
-          {/* Botón de Acción (Oculto si Finalizado o en Revisión) */}
-          {!isCompleted && !isInReview && (
-            <div className="pt-2 pb-8">
+          {/* Acciones del pie (Oculto si Finalizado o en Revisión) */}
+          <div className="pt-2 pb-12">
+            {!isCompleted && !isInReview && (
               <button 
                 onClick={(e) => { e.stopPropagation(); onRegisterProgress?.(); }} 
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
+                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all duration-200"
               >
                 <Plus size={20} strokeWidth={3} /> Registrar Avance
               </button>
-            </div>
-          )}
+            )}
 
-          {/* Mensaje de Revisión */}
-          {isInReview && (
-            <div className="pt-4 pb-8 text-center">
-              <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em] opacity-80 bg-blue-50 py-3 rounded-xl border border-blue-100">
-                Tarea enviada a revisión
-              </p>
-            </div>
-          )}
+            {isInReview && (
+              <div className="text-center">
+                <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em] opacity-80 bg-blue-50 py-4 rounded-2xl border border-blue-100 shadow-sm animate-pulse">
+                  Tarea en proceso de revisión por gerencia
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </main>
       <ImageModal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ ...modalConfig, isOpen: false })} imageUrl={modalConfig.url} title={modalConfig.title} />

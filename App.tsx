@@ -6,7 +6,6 @@ import { LoginView } from './views/LoginView';
 import { RoleSelectionView } from './views/RoleSelectionView';
 import { ManagerDashboard } from './views/ManagerDashboard';
 import { WorkerDashboard } from './views/WorkerDashboard';
-import { OrderDetailView } from './views/OrderDetailView';
 import { NewOrderView } from './views/NewOrderView';
 import { WorkerOrderDetailView } from './views/WorkerOrderDetailView';
 import { WorkerProgressView } from './views/WorkerProgressView';
@@ -18,7 +17,6 @@ type ViewState =
   | 'LOGIN' 
   | 'ROLE_SELECT' 
   | 'DASHBOARD' 
-  | 'ORDER_DETAIL' 
   | 'NEW_ORDER' 
   | 'WORKER_ORDER_DETAIL' 
   | 'WORKER_PROGRESS' 
@@ -58,10 +56,8 @@ const App: React.FC = () => {
         setView('MANAGER_ORDER_DETAIL');
       }
     } else if (role === UserRole.WORKER) {
-      // Ahora usamos una única vista dinámica para el trabajador
+      // Única vista dinámica para todos los estados del trabajador
       setView('WORKER_ORDER_DETAIL');
-    } else {
-      setView('ORDER_DETAIL');
     }
   };
 
@@ -95,11 +91,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans mx-auto max-w-md w-full shadow-2xl overflow-hidden relative">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans mx-auto max-w-md w-full shadow-2xl overflow-hidden relative border-x border-slate-200">
       {view === 'LOGIN' && <LoginView onLogin={handleLogin} />}
       {view === 'ROLE_SELECT' && <RoleSelectionView onSelectRole={handleRoleSelect} />}
       {view === 'DASHBOARD' && renderDashboard()}
-      {view === 'ORDER_DETAIL' && <OrderDetailView onBack={handleBackToDashboard} />}
       {view === 'NEW_ORDER' && <NewOrderView onBack={handleBackToDashboard} />}
       
       {/* Vistas del Trabajador */}
