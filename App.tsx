@@ -12,7 +12,6 @@ import { WorkerOrderDetailView } from './views/WorkerOrderDetailView';
 import { WorkerProgressView } from './views/WorkerProgressView';
 import { ManagerOrderDetailView } from './views/ManagerOrderDetailView';
 import { ManagerOrderDetailNoHistoryView } from './views/ManagerOrderDetailNoHistoryView';
-import { WorkerOrderDetailFinishedView } from './views/WorkerOrderDetailFinishedView';
 import { ManagerOrderDetailFinishedView } from './views/ManagerOrderDetailFinishedView';
 
 type ViewState = 
@@ -25,7 +24,6 @@ type ViewState =
   | 'WORKER_PROGRESS' 
   | 'MANAGER_ORDER_DETAIL' 
   | 'MANAGER_ORDER_DETAIL_NO_HISTORY' 
-  | 'WORKER_ORDER_DETAIL_FINISHED' 
   | 'MANAGER_ORDER_DETAIL_FINISHED';
 
 const App: React.FC = () => {
@@ -60,11 +58,8 @@ const App: React.FC = () => {
         setView('MANAGER_ORDER_DETAIL');
       }
     } else if (role === UserRole.WORKER) {
-      if (task?.status === TaskStatus.COMPLETED) {
-        setView('WORKER_ORDER_DETAIL_FINISHED');
-      } else {
-        setView('WORKER_ORDER_DETAIL');
-      }
+      // Ahora usamos una única vista dinámica para el trabajador
+      setView('WORKER_ORDER_DETAIL');
     } else {
       setView('ORDER_DETAIL');
     }
@@ -84,7 +79,6 @@ const App: React.FC = () => {
   };
 
   const handleRegisterProgressSubmit = () => {
-    // Redirigir directamente al dashboard tras el registro
     setView('DASHBOARD');
     setSelectedTaskId(null);
   };
@@ -120,12 +114,6 @@ const App: React.FC = () => {
         <WorkerProgressView 
           onBack={() => setView('WORKER_ORDER_DETAIL')} 
           onSubmit={handleRegisterProgressSubmit} 
-        />
-      )}
-      {view === 'WORKER_ORDER_DETAIL_FINISHED' && selectedTask && (
-        <WorkerOrderDetailFinishedView 
-          task={selectedTask} 
-          onBack={handleBackToDashboard} 
         />
       )}
 

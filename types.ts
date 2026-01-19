@@ -16,7 +16,7 @@ export interface TaskHistory {
   id: number;
   fecha: string; // ISO date string or formatted string
   comentario: string;
-  history_image: string;
+  history_image?: string;
 }
 
 export interface Task {
@@ -33,6 +33,7 @@ export interface Task {
   task_history?: TaskHistory[];
   foto_original: string;
   evidencia_final: string; //agregado manualmente
+  descripcion_final: string; //agregado manual 19/01
 }
 
 export interface ProjectStats {

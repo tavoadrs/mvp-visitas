@@ -53,7 +53,7 @@ export const ManagerOrderDetailNoHistoryView: React.FC<ManagerOrderDetailNoHisto
                 </div>
                 <div className="space-y-0.5 text-right">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Solicitante</p>
-                  <p className="text-sm font-semibold text-slate-700">Arq. Marcos V.</p>
+                  <p className="text-sm font-semibold text-slate-700">{task.solicitante}</p>
                 </div>
                 <div className="space-y-0.5">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fecha de Solicitud</p>

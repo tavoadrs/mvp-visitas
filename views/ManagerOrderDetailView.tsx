@@ -82,7 +82,7 @@ export const ManagerOrderDetailView: React.FC<ManagerOrderDetailViewProps> = ({ 
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Solicitado por</p>
                 <div className="flex items-center justify-end gap-1 text-sm font-medium text-slate-600">
                   <HardHat size={14} />
-                  Arq. Marcos V.
+                  {task.solicitante}
                 </div>
               </div>
             </div>
